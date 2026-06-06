@@ -63,10 +63,14 @@ def register():
     name = data.get('name')
     email = data.get('email')
     password = data.get('password')
-    role = data.get('role', 'USER') # ADMIN, ANALYST, USER
+    role = data.get('role', 'USER') # ANALYST or USER only
     
     if not name or not email or not password:
         return jsonify({'message': 'Name, email, and password are required!'}), 400
+    
+    # Only allow USER or ANALYST role for new registrations
+    if role not in ['USER', 'ANALYST']:
+        return jsonify({'message': 'Invalid role. Only USER or ANALYST roles are allowed for new registrations.'}), 400
         
     db = get_db()
     

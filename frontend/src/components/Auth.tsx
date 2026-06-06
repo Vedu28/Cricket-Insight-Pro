@@ -159,11 +159,10 @@ export const Auth: React.FC<AuthProps> = ({ onAuthSuccess, backendUrl }) => {
           {!isLogin && !isForgot && (
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Choose Role</label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {[
                   { id: 'USER', label: 'Fan/User', icon: Activity },
-                  { id: 'ANALYST', label: 'Analyst', icon: Shield },
-                  { id: 'ADMIN', label: 'Admin', icon: Lock }
+                  { id: 'ANALYST', label: 'Analyst', icon: Shield }
                 ].map((item) => {
                   const Icon = item.icon;
                   const active = role === item.id;
@@ -240,14 +239,7 @@ export const Auth: React.FC<AuthProps> = ({ onAuthSuccess, backendUrl }) => {
           )}
         </div>
 
-        {/* Demo Credentials Alert */}
-        <div className="mt-6 p-3 bg-slate-900/40 rounded-xl border border-slate-800/40 text-[11px] text-slate-500">
-          <p className="font-semibold text-slate-400 mb-1">💡 Demo Credentials (Pre-seeded):</p>
-          <ul className="list-disc pl-4 space-y-0.5">
-            <li>Admin: <code className="text-slate-400">admin@cricketinsight.com</code> / password: <code className="text-slate-400">password123</code></li>
-            <li>Analyst: <code className="text-slate-400">analyst@cricketinsight.com</code> / password: <code className="text-slate-400">password123</code></li>
-          </ul>
-        </div>
+
       </div>
     </div>
   );

@@ -189,14 +189,79 @@ class MockDatabase:
     def list_collection_names(self):
         return list(self._read_db().keys())
 
+class MongoCollectionWrapper:
+    def __init__(self, real_collection):
+        self.real_collection = real_collection
+
+    def _convert_query(self, query):
+        if not query or not isinstance(query, dict):
+            return query
+        new_query = {}
+        for k, v in query.items():
+            if k == "_id" and isinstance(v, str):
+                try:
+                    new_query[k] = ObjectId(v)
+                except Exception:
+                    new_query[k] = v
+            elif isinstance(v, dict):
+                new_query[k] = self._convert_query(v)
+            else:
+                new_query[k] = v
+        return new_query
+
+    def find(self, query=None, *args, **kwargs):
+        converted_query = self._convert_query(query)
+        return self.real_collection.find(converted_query, *args, **kwargs)
+
+    def find_one(self, query=None, *args, **kwargs):
+        converted_query = self._convert_query(query)
+        return self.real_collection.find_one(converted_query, *args, **kwargs)
+
+    def insert_one(self, document, *args, **kwargs):
+        if isinstance(document, dict) and "_id" in document and isinstance(document["_id"], str):
+            try:
+                document = dict(document)
+                document["_id"] = ObjectId(document["_id"])
+            except Exception:
+                pass
+        return self.real_collection.insert_one(document, *args, **kwargs)
+
+    def update_one(self, query, update, *args, **kwargs):
+        converted_query = self._convert_query(query)
+        return self.real_collection.update_one(converted_query, update, *args, **kwargs)
+
+    def delete_one(self, query, *args, **kwargs):
+        converted_query = self._convert_query(query)
+        return self.real_collection.delete_one(converted_query, *args, **kwargs)
+
+    def delete_many(self, query, *args, **kwargs):
+        converted_query = self._convert_query(query)
+        return self.real_collection.delete_many(converted_query, *args, **kwargs)
+
+    def count_documents(self, query=None, *args, **kwargs):
+        if query is None:
+            query = {}
+        converted_query = self._convert_query(query)
+        return self.real_collection.count_documents(converted_query, *args, **kwargs)
+
+class MongoDatabaseWrapper:
+    def __init__(self, real_db):
+        self.real_db = real_db
+
+    def __getitem__(self, name):
+        return MongoCollectionWrapper(self.real_db[name])
+
+    def list_collection_names(self):
+        return self.real_db.list_collection_names()
+
 try:
     import pymongo
     print("Connecting to MongoDB at:", Config.MONGO_URI)
     db_client = pymongo.MongoClient(Config.MONGO_URI, serverSelectionTimeoutMS=2000)
     # Check connection
     db_client.server_info()
-    db = db_client[Config.DB_NAME]
-    print(f"Successfully connected to MongoDB: database '{Config.DB_NAME}' active.")
+    db = MongoDatabaseWrapper(db_client[Config.DB_NAME])
+    print(f"Successfully connected to MongoDB: database '{Config.DB_NAME}' active (wrapped).")
 except Exception as e:
     print(f"MongoDB connection failed: {e}")
     print("Falling back to local persistent JSON Database at:", MOCK_DB_PATH)
@@ -205,3 +270,4 @@ except Exception as e:
 
 def get_db():
     return db
+

@@ -137,8 +137,8 @@ export default function App() {
     <div className="min-h-screen flex text-slate-200">
       
       {/* Sidebar - Desktop Layout */}
-      <aside className="w-64 bg-slate-950/90 border-r border-slate-900 shrink-0 hidden lg:flex flex-col justify-between py-6 px-4 fixed top-0 bottom-0 z-20">
-        <div className="space-y-8">
+      <aside className="w-64 bg-slate-950/90 border-r border-slate-900 shrink-0 hidden lg:flex flex-col py-6 px-4 fixed top-0 bottom-0 z-20">
+        <div className="space-y-8 overflow-y-auto flex-1">
           
           {/* Brand Logo */}
           <div className="flex items-center space-x-3.5 px-2">
@@ -175,22 +175,22 @@ export default function App() {
         </div>
 
         {/* User Card & Log Out */}
-        <div className="pt-6 border-t border-slate-900 space-y-4">
-          <div className="flex items-center space-x-3 px-2">
-            <div className="p-2 bg-slate-900 border border-slate-800 text-slate-400 rounded-lg">
-              <User className="w-4.5 h-4.5" />
+        <div className="mt-auto pt-6 border-t border-slate-900 space-y-2 shrink-0">
+          <div className="flex items-center space-x-2 px-2">
+            <div className="p-1.5 bg-slate-900 border border-slate-800 text-slate-400 rounded-lg shrink-0">
+              <User className="w-4 h-4" />
             </div>
-            <div className="overflow-hidden">
+            <div className="overflow-hidden min-w-0">
               <p className="text-xs font-bold text-slate-200 truncate">{user.name}</p>
-              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">{user.role}</p>
+              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">{user.role}</p>
             </div>
           </div>
           
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-4.5 py-3 rounded-xl text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-950/10 border border-dashed border-red-500/10 hover:border-red-500/30 transition-all"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[11px] font-bold text-red-400 hover:text-red-300 hover:bg-red-950/10 border border-dashed border-red-500/10 hover:border-red-500/30 transition-all shrink-0 whitespace-nowrap"
           >
-            <LogOut className="w-4.5 h-4.5" />
+            <LogOut className="w-3.5 h-3.5 shrink-0" />
             <span>Log Out</span>
           </button>
         </div>

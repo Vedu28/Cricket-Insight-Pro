@@ -5,3 +5,5 @@ bcrypt
 pyjwt
 numpy
 pandas
+python-dotenv
+

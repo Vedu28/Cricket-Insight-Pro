@@ -39,7 +39,8 @@ def create_app():
     # Seed database if player count is zero
     try:
         db = get_db()
-        player_count = db["players"].count_documents()
+        player_count = db["players"].count_documents({})
+
         if player_count == 0:
             print("[Startup] Database is empty. Running automatic seed data generator...")
             seed_database()

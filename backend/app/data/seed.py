@@ -501,7 +501,9 @@ def seed_database():
         })
 
     # 4.5 Seed Mitchell Starc
+    starc_id = seeded_players["Mitchell Starc"]
     starc_wickets = [3, 1, 4, 0, 2, 1, 3, 0, 2, 3]
+
     starc_runs_con = [35, 42, 28, 45, 32, 24, 52, 38, 22, 18]
     starc_overs = [4.0, 4.0, 10.0, 10.0, 4.0, 4.0, 10.0, 10.0, 4.0, 4.0]
     
